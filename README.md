@@ -1,6 +1,8 @@
 proxy-node
 ==========
 
+Proxy incoming HTTP requests to multiple targets/ports based on the url.    
+Use for hosting many web domains on the same server.    
 Create a servers.json file in the same directory.    
 ````
 {
