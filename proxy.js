@@ -5,7 +5,7 @@ var colors = require('colors'),
     servers = require('./servers.json'),
     debug = !!(process.argv.length > 3 && process.argv[3]=='debug');
 
-if(debug) console.log(servers.servers);
+console.log(servers.servers);
 process.on('uncaughtException', console.log);
 
 acceptor.on('request', function(r, s) {
