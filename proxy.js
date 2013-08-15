@@ -23,11 +23,11 @@ acceptor.on('request', function(r, s) {
     var host = r.headers.host.replace('www.','');
     if(debug){
          console.log('**************')
-         console.log('HOST:'.green, host);
-         console.log('URL:'.green, r.url);
-         console.log('RemoteAddress:'.green, r.socket.remoteAddress);
-         console.log('UA:'.green, r.headers['user-agent']);
-         console.log('Resolves to:'.green, servers.servers[host])
+         console.log('HOST:', host);
+         console.log('URL:', r.url);
+         console.log('RemoteAddress:', r.socket.remoteAddress);
+         console.log('UA:', r.headers['user-agent']);
+         console.log('Resolves to:', servers.servers[host])
     }
     if(servers.servers[host]){
         var options = url.parse('http://' + servers.servers[host] + r.url);
