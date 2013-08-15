@@ -1,14 +1,24 @@
-var colors = require('colors'),
-    url = require('url'),
+var url = require('url'),
     http = require('http'),
     acceptor = http.createServer().listen(process.argv[2] || 80),
     servers = require('./servers.json'),
-    debug = !!(process.argv.length > 3 && process.argv[3]=='debug');
+    block = require('./block.json'),
+    debug = process.env.debug;
 
 console.log(servers.servers);
 process.on('uncaughtException', console.log);
 
 acceptor.on('request', function(r, s) {
+    for(i in block){
+        for(v in block[i]){
+            var rx = RegExp(block[i][v], 'i');
+            console.log(r[i][v], rx)
+            if(r[i][v].match(rx)){
+                if(debug) console.log('BLOCKED', r[i][v], rx);
+                return s.end();
+            }
+        }
+    }
     r.headers['x-forwarded-for'] = r.socket.remoteAddress;
     var host = r.headers.host.replace('www.','');
     if(debug){
