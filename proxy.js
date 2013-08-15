@@ -10,9 +10,16 @@ process.on('uncaughtException', console.log);
 
 acceptor.on('request', function(r, s) {
     for(i in block){
+        if(typeof block[i] === 'string'){
+            var rx = RegExp(block[i], 'i');
+            if(r[i].match(rx)){
+                if(debug) console.log('BLOCKED', r[i], rx);
+                return s.end();
+            } 
+            continue;       
+        }
         for(v in block[i]){
             var rx = RegExp(block[i][v], 'i');
-            console.log(r[i][v], rx)
             if(r[i][v].match(rx)){
                 if(debug) console.log('BLOCKED', r[i][v], rx);
                 return s.end();
@@ -22,12 +29,13 @@ acceptor.on('request', function(r, s) {
     r.headers['x-forwarded-for'] = r.socket.remoteAddress;
     var host = r.headers.host.replace('www.','');
     if(debug){
-         console.log('**************')
+         console.log('')
          console.log('HOST:', host);
          console.log('URL:', r.url);
          console.log('RemoteAddress:', r.socket.remoteAddress);
          console.log('UA:', r.headers['user-agent']);
-         console.log('Resolves to:', servers.servers[host])
+         console.log('Resolves to:', servers.servers[host]);
+         console.log('')
     }
     if(servers.servers[host]){
         var options = url.parse('http://' + servers.servers[host] + r.url);
